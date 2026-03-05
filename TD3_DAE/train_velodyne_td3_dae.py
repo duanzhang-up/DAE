@@ -340,21 +340,19 @@ while timestep < max_timesteps:
                 noise_clip,
                 policy_freq,
             )
-            if episode_reward > max_reward:
-                max_reward = episode_reward
-            if episode_reward < min_reward:
-                min_reward = episode_reward
-            if min_reward != max_reward: 
-                R.append((episode_reward - min_reward) / (max_reward - min_reward)) # Min-max normalization processing
-            else:
-                R.append(1)
+            R.append(episode_reward) 
             writer.add_scalar("episode_reward", episode_reward, timestep)    
             if episode_num % beta_freq == 0 and episode_num >= evaluations_num:
-                last_R = R[-evaluations_num:] # Get last evaluations_num values from list R
-                variance_of_last = a*statistics.variance(last_R) # Get variance value
-                writer.add_scalar("variance_of_last", variance_of_last, timestep) 
-                beta_noise = math.exp(-variance_of_last) # Get beta value
-                writer.add_scalar("beta_noise", beta_noise, timestep) 
+            # if episode_num % beta_freq == 0:
+                last_R = R[-evaluations_num:] 
+                max_reward = max(last_R)
+                min_reward = min(last_R)
+                mean_reward = sum(last_R) / len(last_R)
+                last_R2 = [(x - mean_reward) / (max_reward - min_reward) for x in last_R]
+                variance_of_last = a*statistics.variance(last_R2) 
+                writer.add_scalar("variance_of_last", variance_of_last, episode_num) 
+                beta_noise = math.exp(-variance_of_last) 
+                writer.add_scalar("beta_noise", beta_noise, episode_num) 
 
 
         # If timesteps since last evaluation reach evaluation frequency, perform evaluation

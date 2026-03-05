@@ -41,13 +41,13 @@ $ source devel_isolated/setup.bash
 
 Run the training:
 ```shell
-$ cd ~/DAEP/TD3_DAEP
-$ python3 train_velodyne_td3_daep.py
+$ cd ~/DAEP/TD3_DAE
+$ python3 train_velodyne_td3_dae.py
 ```
 
 To check the training process on tensorboard:
 ```shell
-$ cd ~/DAEP/TD3_DAEP
+$ cd ~/DAEP/TD3_DAE
 $ tensorboard --logdir runs
 ```
 
@@ -59,6 +59,6 @@ $ killall -9 rosout roslaunch rosmaster gzserver nodelet robot_state_publisher g
 Once training is completed, test the model:
 ```shell
 $ cd ~/DAEP/TD3_DAEP
-$ python3 test_velodyne_td3_daep.py
+$ python3 test_velodyne_td3_dae.py
 ```
 
